@@ -1,0 +1,37 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: ./infra/gradle/Dockerfile
+    container_name: app-container
+    working_dir: /home/gradle/app
+    ports:
+      - 8888:8080
+    depends_on:
+      - db
+    command: gradle bootRun
+
+
+  db:
+    image: mysql:8.0.33-debian
+    container_name: db-container
+    ports:
+      - 3306:3306
+      # Todo:設定ファイルボリューム
+      # Todo:永続化データボリューム
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: sample
+      TZ: "Asia/Tokyo"
+
+  web:
+    image: nginx:1.24.0-bullseye
+    container_name: web-container
+    ports:
+      - 80:80
+    restart: always
+    # Todo:設定ファイルボリューム
+
+# Todo:ネットワーク作成
+
