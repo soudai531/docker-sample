@@ -30,12 +30,4 @@ tasks.named('test') {
 
 bootJar{
     archiveFileName = 'app.jar'
-
-    doLast {
-        // Dockerコンテナの再起動コマンドを実行する
-        exec {
-            commandLine 'docker', 'restart', '<コンテナ名またはコンテナID>'
-        }
-    }
-
 }

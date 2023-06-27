@@ -9,13 +9,13 @@ services:
       - sample-network
     ports:
       - "8888:8080"
-    volumes:
-      - ./build/libs/app.jar :/usr/local/bin
+#    volumes:
+#      - ./build/libs/app.jar :/usr/local/bin
     tty: true
     restart: always
     depends_on:
       db:
-        condition: service_started
+        condition: service_healthy
     deploy:
       resources:
         limits:
@@ -45,11 +45,11 @@ services:
       MYSQL_PASSWORD: password1
       MYSQL_DATABASE: sampledb
       TZ: "Asia/Tokyo"
-#    healthcheck:
-#      test: [ "CMD", "mysql", "-u", "root", "--password=root", "-e", "select * ", "sampledb" ]
-#      interval: 1s
-#      timeout: 3s
-#      retries: 30
+    healthcheck:
+      test: [ "CMD", "mysql", "-u", "root", "--password=root"]
+      interval: 1s
+      timeout: 3s
+      retries: 60
 
   web:
     image: nginx:1.24.0-bullseye
