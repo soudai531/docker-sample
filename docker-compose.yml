@@ -7,21 +7,19 @@ services:
     container_name: app
     networks:
       - sample-network
-    working_dir: /home/gradle/app
     ports:
       - "8888:8080"
     tty: true
     restart: always
     depends_on:
-      - db
+      db:
+        condition: service_started
+    deploy:
+      resources:
+        limits:
+          memory: 1g
     environment:
-#       application.propertiesの設定情報は無視されます。
-      spring.datasource.driverClassName: "com.mysql.cj.jdbc.Driver"
       spring.datasource.url: "jdbc:mysql://db:3306/sampledb"
-      spring.datasource.username: "root"
-      spring.datasource.password: "root"
-      spring.sql.init.mode: "always"
-    command: gradle bootRun
 
   db:
     image: mysql:8.0.33-debian
@@ -35,6 +33,10 @@ services:
     expose:
       - "3306"
     restart: always
+    deploy:
+      resources:
+        limits:
+          memory: 1g
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: user1
@@ -49,6 +51,10 @@ services:
       - sample-network
     ports:
       - "80:80"
+    deploy:
+      resources:
+        limits:
+          memory: 1g
     restart: always
     # Todo:設定ファイルボリューム
 # Todo:ネットワーク作成

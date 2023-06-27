@@ -21,9 +21,8 @@ public class HelloController {
     public String hello(){
         System.out.println("hello");
         Optional<Samples> record = repository.findById(1);
-        System.out.println(record);
         if(record.isPresent()){
-            return "hello DB";
+            return record.get().getContent();
         }
         return "Hello Docker Compose";
     }
