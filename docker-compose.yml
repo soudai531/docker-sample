@@ -9,6 +9,8 @@ services:
       - sample-network
     ports:
       - "8888:8080"
+    volumes:
+      - ./build/libs/app.jar :/usr/local/bin
     tty: true
     restart: always
     depends_on:
@@ -19,7 +21,7 @@ services:
         limits:
           memory: 1g
     environment:
-      spring.datasource.url: "jdbc:mysql://db:3306/sampledb"
+      DB_URL: "jdbc:mysql://db:3306/sampledb"
 
   db:
     image: mysql:8.0.33-debian
@@ -43,6 +45,11 @@ services:
       MYSQL_PASSWORD: password1
       MYSQL_DATABASE: sampledb
       TZ: "Asia/Tokyo"
+#    healthcheck:
+#      test: [ "CMD", "mysql", "-u", "root", "--password=root", "-e", "select * ", "sampledb" ]
+#      interval: 1s
+#      timeout: 3s
+#      retries: 30
 
   web:
     image: nginx:1.24.0-bullseye
