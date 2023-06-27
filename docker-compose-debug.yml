@@ -11,8 +11,8 @@ services:
       - "8888:8080"
     volumes:
       - type: bind
-        source: ./build/ # ホスト側
-        target: /usr/local/bin/sample/build/ # コンテナ側
+        source: . # ホスト側
+        target: /usr/local/bin/sample/ # コンテナ側
     tty: true
     restart: always
     depends_on:
@@ -24,7 +24,7 @@ services:
           memory: 1g
     environment:
       DB_URL: "jdbc:mysql://db:3306/sampledb"
-    command: sh -c "cp -r /tmp/build/. /usr/local/bin/sample/build/  && java -jar /usr/local/bin/sample/build/libs/app.jar"
+    command: sh -c "cd /usr/local/bin/sample && ./gradlew bootRun --quiet"
 
   db:
     image: mysql:8.0.33-debian
@@ -70,5 +70,3 @@ services:
 # Todo:ネットワーク作成
 networks:
   sample-network:
-
-
